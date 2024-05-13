@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package main;
+
+option go_package = "main/";
+
+message Entity {
+  string id = 1;
+  string name = 2;
+}
+
+message EntityRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message EntityResponse {
+  repeated Entity entities = 1;
+  uint32 total = 2;
+}
+
+service EntityService {
+  rpc GetEntityWithPagination (EntityRequest) returns (EntityResponse);
+  rpc GetEntityWithStream (google.protobuf.Empty) returns (stream Entity);
+}
+
+// Execute script below to generate .pb files
+// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative entity.proto
